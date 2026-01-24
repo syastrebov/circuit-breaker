@@ -1,0 +1,40 @@
+name: Tests
+
+on:
+  push:
+
+jobs:
+  php-unit:
+    name: PHP Unit
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Deploy
+        run: |
+          docker compose up -d
+          sleep 10
+          docker run --rm \
+            --network circuit-breaker-tests \
+            redis:alpine \
+            redis-cli \
+            --cluster create \
+            redis-node-1:6379 \
+            redis-node-2:6379 \
+            redis-node-3:6379 \
+            --cluster-replicas 0 \
+            --cluster-yes
+
+      - name: Composer install
+        run: composer install --optimize-autoloader --no-interaction --no-progress --prefer-dist --ignore-platform-reqs
+
+      - name: PHPStan
+        run: docker exec -t circuit-breaker-php vendor/bin/phpstan analyse src tests
+
+      - name: PHPcs
+        run: docker exec -t circuit-breaker-php vendor/bin/phpcs src tests
+
+      - name: Run phpunit
+        run: docker exec -t circuit-breaker-php vendor/bin/phpunit

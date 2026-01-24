@@ -1,0 +1,11 @@
+* text=auto
+
+/docker export-ignore
+/tests export-ignore
+/.gitattributes export-ignore
+/.github export-ignore
+/.gitignore export-ignore
+/docker-compose.yaml export-ignore
+/phpunit.xml export-ignore
+/CHANGELOG.md export-ignore
+/README.md export-ignore

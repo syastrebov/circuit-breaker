@@ -1,0 +1,62 @@
+services:
+  redis:
+    image: redis:7-alpine
+    networks:
+      - default
+
+  redis-node-1: &redis-template
+    image: redis:7-alpine
+    command: redis-server --cluster-enabled yes --cluster-config-file nodes.conf --cluster-node-timeout 5000 --appendonly yes --port 6379 --bind 0.0.0.0 --protected-mode no
+    networks:
+      - default
+
+  redis-node-2: *redis-template
+  redis-node-3: *redis-template
+
+  memcached:
+    image: memcached:alpine
+    networks:
+      - default
+
+  mysql:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: database
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+    networks:
+      - default
+
+  postgres:
+    image: postgres:16
+    environment:
+      POSTGRES_DB: database
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+    networks:
+      - default
+
+  php:
+    container_name: circuit-breaker-php
+    build:
+      context: .
+      dockerfile: ./docker/php/Dockerfile
+    volumes:
+      - ./:/var/www
+    depends_on:
+      - redis
+      - redis-node-1
+      - redis-node-2
+      - redis-node-3
+      - memcached
+      - mysql
+      - postgres
+    stdin_open: true
+    networks:
+      - default
+
+networks:
+  default:
+    name: circuit-breaker-tests
+    attachable: true
