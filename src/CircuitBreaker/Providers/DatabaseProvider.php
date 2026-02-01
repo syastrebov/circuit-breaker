@@ -1,9 +1,9 @@
 <?php
 
-namespace CircuitBreaker\Provider;
+namespace CircuitBreaker\Providers;
 
-use CircuitBreaker\CircuitBreakerState;
-use CircuitBreaker\Exception\ProviderException;
+use CircuitBreaker\Enums\CircuitBreakerState;
+use CircuitBreaker\Exceptions\ProviderException;
 
 readonly class DatabaseProvider implements ProviderInterface
 {

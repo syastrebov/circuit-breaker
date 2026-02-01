@@ -2,9 +2,9 @@
 
 namespace Tests\Unit\CircuitBreaker;
 
-use CircuitBreaker\CircuitBreakerState;
-use CircuitBreaker\Provider\ProviderInterface;
-use CircuitBreaker\Provider\MemoryProvider;
+use CircuitBreaker\Enums\CircuitBreakerState;
+use CircuitBreaker\Providers\MemoryProvider;
+use CircuitBreaker\Providers\ProviderInterface;
 
 abstract class AbstractStateTestCase extends \PHPUnit\Framework\TestCase
 {

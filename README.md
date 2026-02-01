@@ -15,7 +15,7 @@ composer require syastrebov/circuit-breaker
 
 ~~~php
 use CircuitBreaker\CircuitBreaker;
-use CircuitBreaker\Provider\RedisProvider;
+use CircuitBreaker\Providers\RedisProvider;
 
 $redis = new \Redis();
 $redis->connect('redis');
@@ -37,7 +37,7 @@ echo $response;
 
 ~~~php
 use CircuitBreaker\CircuitBreaker;
-use CircuitBreaker\Provider\RedisProvider;
+use CircuitBreaker\Providers\RedisProvider;
 
 $redis = new \Redis();
 $redis->connect('redis');
@@ -64,8 +64,8 @@ echo $response;
 
 ~~~php
 use CircuitBreaker\CircuitBreaker;
-use CircuitBreaker\Provider\RedisProvider;
-use CircuitBreaker\Exception;
+use CircuitBreaker\Providers\RedisProvider;
+use CircuitBreaker\Exceptions;
 
 $redis = new \Redis();
 $redis->connect('redis');
@@ -89,7 +89,7 @@ try {
 
 ~~~php
 use CircuitBreaker\CircuitBreaker;
-use CircuitBreaker\Provider\RedisProvider;
+use CircuitBreaker\Providers\RedisProvider;
 use CircuitBreaker\CircuitBreakerConfig;
 
 $redis = new \Redis();
@@ -117,7 +117,7 @@ $circuit = new CircuitBreaker(new RedisProvider($redis), new CircuitBreakerConfi
 
 ~~~php
 use CircuitBreaker\CircuitBreaker;
-use CircuitBreaker\Provider\RedisProvider;
+use CircuitBreaker\Providers\RedisProvider;
 
 $redis = new \Redis();
 $redis->connect('redis');
@@ -129,7 +129,7 @@ $circuit = new CircuitBreaker(new RedisProvider($redis));
 
 ~~~php
 use CircuitBreaker\CircuitBreaker;
-use CircuitBreaker\Provider\RedisProvider;
+use CircuitBreaker\Providers\RedisProvider;
 
 $redis = new \RedisCluster(
         'my cluster',
@@ -151,7 +151,7 @@ $circuit = new CircuitBreaker(new RedisProvider($redis));
 
 ~~~php
 use CircuitBreaker\CircuitBreaker;
-use CircuitBreaker\Provider\MemcachedProvider;
+use CircuitBreaker\Providers\MemcachedProvider;
 
 $memcached = new \Memcached();
 $memcached->addServer('memcached', 11211);
@@ -163,7 +163,7 @@ $circuit = new CircuitBreaker(new MemcachedProvider($memcached));
 
 ~~~php
 use CircuitBreaker\CircuitBreaker;
-use CircuitBreaker\Provider\DatabaseProvider;
+use CircuitBreaker\Providers\DatabaseProvider;
 
 $table = 'circuit_breaker';
 
@@ -185,7 +185,7 @@ $provider = new DatabaseProvider($pdo, $table);
 
 ~~~php
 use CircuitBreaker\CircuitBreaker;
-use CircuitBreaker\Provider\DatabaseProvider;
+use CircuitBreaker\Providers\DatabaseProvider;
 
 $table = 'circuit_breaker';
 
@@ -215,7 +215,7 @@ $provider = new DatabaseProvider($pdo, $table);
 
 ~~~php
 use CircuitBreaker\CircuitBreaker;
-use CircuitBreaker\Provider\DatabaseProvider;
+use CircuitBreaker\Providers\DatabaseProvider;
 
 $table = 'circuit_breaker';
 $databaseFile = __DIR__ . '/database.sqlite';

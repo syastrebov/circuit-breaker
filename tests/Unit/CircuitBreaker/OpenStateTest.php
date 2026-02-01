@@ -4,8 +4,8 @@ namespace Tests\Unit\CircuitBreaker;
 
 use CircuitBreaker\CircuitBreaker;
 use CircuitBreaker\CircuitBreakerConfig;
-use CircuitBreaker\CircuitBreakerState;
-use CircuitBreaker\Exception\UnableToProcessException;
+use CircuitBreaker\Enums\CircuitBreakerState;
+use CircuitBreaker\Exceptions\UnableToProcessException;
 
 class OpenStateTest extends AbstractStateTestCase
 {

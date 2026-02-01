@@ -1,6 +1,6 @@
 <?php
 
-namespace CircuitBreaker\Exception;
+namespace CircuitBreaker\Exceptions;
 
 class FailedRequestException extends \RuntimeException
 {

@@ -1,9 +1,9 @@
 <?php
 
-namespace Tests\Unit\CircuitBreaker\Provider;
+namespace Tests\Unit\CircuitBreaker\Providers;
 
-use CircuitBreaker\CircuitBreakerState;
-use CircuitBreaker\Provider\ProviderInterface;
+use CircuitBreaker\Enums\CircuitBreakerState;
+use CircuitBreaker\Providers\ProviderInterface;
 
 abstract class ProviderTestCase extends \PHPUnit\Framework\TestCase
 {

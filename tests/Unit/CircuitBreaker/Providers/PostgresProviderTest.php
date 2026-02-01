@@ -1,8 +1,8 @@
 <?php
 
-namespace Tests\Unit\CircuitBreaker\Provider;
+namespace Tests\Unit\CircuitBreaker\Providers;
 
-use CircuitBreaker\Provider\DatabaseProvider;
+use CircuitBreaker\Providers\DatabaseProvider;
 
 class PostgresProviderTest extends ProviderTestCase
 {

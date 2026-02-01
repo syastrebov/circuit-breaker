@@ -2,14 +2,16 @@
 
 namespace CircuitBreaker;
 
-use CircuitBreaker\Provider\ProviderInterface;
-use CircuitBreaker\Exception\ProviderException;
-use CircuitBreaker\Exception\FailedRequestException;
-use CircuitBreaker\Exception\UnableToProcessException;
-use CircuitBreaker\Exception\UseFallbackException;
+use CircuitBreaker\Contracts\CircuitBreakerInterface;
+use CircuitBreaker\Enums\CircuitBreakerState;
+use CircuitBreaker\Exceptions\FailedRequestException;
+use CircuitBreaker\Exceptions\ProviderException;
+use CircuitBreaker\Exceptions\UnableToProcessException;
+use CircuitBreaker\Exceptions\UseFallbackException;
+use CircuitBreaker\Providers\ProviderInterface;
 use Psr\Log\LoggerInterface;
 
-class CircuitBreaker
+class CircuitBreaker implements CircuitBreakerInterface
 {
     public function __construct(
         private readonly ProviderInterface $provider,

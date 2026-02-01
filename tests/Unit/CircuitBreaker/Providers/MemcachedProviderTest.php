@@ -1,8 +1,8 @@
 <?php
 
-namespace Tests\Unit\CircuitBreaker\Provider;
+namespace Tests\Unit\CircuitBreaker\Providers;
 
-use CircuitBreaker\Provider\MemcachedProvider;
+use CircuitBreaker\Providers\MemcachedProvider;
 
 class MemcachedProviderTest extends ProviderTestCase
 {

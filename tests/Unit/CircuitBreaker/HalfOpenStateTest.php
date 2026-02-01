@@ -4,7 +4,7 @@ namespace Tests\Unit\CircuitBreaker;
 
 use CircuitBreaker\CircuitBreaker;
 use CircuitBreaker\CircuitBreakerConfig;
-use CircuitBreaker\CircuitBreakerState;
+use CircuitBreaker\Enums\CircuitBreakerState;
 
 class HalfOpenStateTest extends AbstractStateTestCase
 {

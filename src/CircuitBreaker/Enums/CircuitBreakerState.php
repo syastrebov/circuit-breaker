@@ -1,6 +1,6 @@
 <?php
 
-namespace CircuitBreaker;
+namespace CircuitBreaker\Enums;
 
 enum CircuitBreakerState: string
 {

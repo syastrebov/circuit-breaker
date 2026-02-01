@@ -1,8 +1,8 @@
 <?php
 
-namespace CircuitBreaker\Provider;
+namespace CircuitBreaker\Providers;
 
-use CircuitBreaker\CircuitBreakerState;
+use CircuitBreaker\Enums\CircuitBreakerState;
 
 interface ProviderInterface
 {

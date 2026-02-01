@@ -1,8 +1,8 @@
 <?php
 
-namespace Tests\Unit\CircuitBreaker\Provider;
+namespace Tests\Unit\CircuitBreaker\Providers;
 
-use CircuitBreaker\Provider\RedisProvider;
+use CircuitBreaker\Providers\RedisProvider;
 
 class RedisClusterProviderTest extends ProviderTestCase
 {
