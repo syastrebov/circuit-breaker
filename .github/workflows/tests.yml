@@ -31,7 +31,7 @@ jobs:
         run: composer install --optimize-autoloader --no-interaction --no-progress --prefer-dist --ignore-platform-reqs
 
       - name: PHPStan
-        run: docker exec -t circuit-breaker-php vendor/bin/phpstan analyse src tests
+        run: docker exec -t circuit-breaker-php vendor/bin/phpstan analyse src tests --memory-limit=256M
 
       - name: PHPcs
         run: docker exec -t circuit-breaker-php vendor/bin/phpcs src tests
