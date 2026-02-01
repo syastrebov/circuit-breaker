@@ -1,6 +1,7 @@
 PHP implementation of circuit breaker wrapper for microservices and api calls.
 
 * Laravel package: https://github.com/syastrebov/laravel-circuit-breaker
+* Symfony package: https://github.com/syastrebov/circuit-breaker-bundle
 
 ## Install
 
