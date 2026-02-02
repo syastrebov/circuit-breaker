@@ -96,6 +96,8 @@ $redis = new \Redis();
 $redis->connect('redis');
 
 $circuit = new CircuitBreaker(new RedisProvider($redis), new CircuitBreakerConfig(
+    // Prefix
+    prefix: 'api',
     // Number of attempts within run() action
     retries: 5,
     // Number of failed attempts to change state to 'OPEN'
@@ -132,16 +134,15 @@ use CircuitBreaker\CircuitBreaker;
 use CircuitBreaker\Providers\RedisProvider;
 
 $redis = new \RedisCluster(
-        'my cluster',
-        [
-            'redis-node-1:6379',
-            'redis-node-2:6379',
-            'redis-node-3:6379',
-        ],
-        1.5,
-        1.5,
-        true
-    )
+    'my cluster',
+    [
+        'redis-node-1:6379',
+        'redis-node-2:6379',
+        'redis-node-3:6379',
+    ],
+    1.5,
+    1.5,
+    true
 );
 
 $circuit = new CircuitBreaker(new RedisProvider($redis));
@@ -170,11 +171,13 @@ $table = 'circuit_breaker';
 $pdo = new \PDO("mysql:host=mysql;dbname=database", 'user', 'password');
 $pdo->prepare("
     CREATE TABLE IF NOT EXISTS $table (
-        name VARCHAR(255) NOT NULL UNIQUE,
+        prefix VARCHAR(255) NOT NULL,
+        name VARCHAR(255) NOT NULL,
         state ENUM('closed', 'open', 'half_open'),
         state_timestamp INT,
         half_open_attempts INT,
-        failed_attempts INT
+        failed_attempts INT,
+        CONSTRAINT prefix_name_unique UNIQUE (prefix, name)
     );
 ")->execute();
 
@@ -200,11 +203,13 @@ $pdo->prepare("
 ")->execute();
 $pdo->prepare("    
     CREATE TABLE IF NOT EXISTS $table (
-        name VARCHAR(255) UNIQUE NOT NULL,
+        prefix VARCHAR(255) NOT NULL,
+        name VARCHAR(255) NOT NULL,
         state state_enum NULL,
         state_timestamp INT,
         half_open_attempts INT,
-        failed_attempts INT
+        failed_attempts INT,
+        CONSTRAINT prefix_name_unique UNIQUE (prefix, name)
     );
 ")->execute();
 
@@ -223,11 +228,13 @@ $databaseFile = __DIR__ . '/database.sqlite';
 $pdo = new \PDO("sqlite:$databaseFile");
 $pdo->prepare("    
     CREATE TABLE IF NOT EXISTS $table (
-        name VARCHAR(255) UNIQUE,
+        prefix VARCHAR(255) NOT NULL,
+        name VARCHAR(255) NOT NULL,
         state TEXT CHECK(state IN ('open', 'half_open', 'closed')),
         state_timestamp INTEGER,
         half_open_attempts INTEGER,
-        failed_attempts INTEGER
+        failed_attempts INTEGER,
+        CONSTRAINT prefix_name_unique UNIQUE (prefix, name)
     );
 ")->execute();
 

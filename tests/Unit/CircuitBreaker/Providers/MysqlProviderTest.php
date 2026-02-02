@@ -13,11 +13,13 @@ class MysqlProviderTest extends ProviderTestCase
         $pdo = new \PDO("mysql:host=mysql;dbname=database", 'user', 'password');
         $pdo->prepare("
             CREATE TABLE IF NOT EXISTS $table (
-                name VARCHAR(255) NOT NULL UNIQUE,
+                prefix VARCHAR(255) NOT NULL,
+                name VARCHAR(255) NOT NULL,
                 state ENUM('closed', 'open', 'half_open'),
                 state_timestamp INT,
                 half_open_attempts INT,
-                failed_attempts INT
+                failed_attempts INT,
+                CONSTRAINT prefix_name_unique UNIQUE (prefix, name)
             );
         ")->execute();
 

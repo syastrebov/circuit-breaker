@@ -21,11 +21,13 @@ class PostgresProviderTest extends ProviderTestCase
         ")->execute();
         $pdo->prepare("    
             CREATE TABLE IF NOT EXISTS $table (
-                name VARCHAR(255) UNIQUE NOT NULL,
+                prefix VARCHAR(255) NOT NULL,
+                name VARCHAR(255) NOT NULL,
                 state state_enum NULL,
                 state_timestamp INT,
                 half_open_attempts INT,
-                failed_attempts INT
+                failed_attempts INT,
+                CONSTRAINT prefix_name_unique UNIQUE (prefix, name)
             );
         ")->execute();
 

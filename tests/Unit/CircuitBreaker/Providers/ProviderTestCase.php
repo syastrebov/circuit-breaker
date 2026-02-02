@@ -4,96 +4,95 @@ namespace Tests\Unit\CircuitBreaker\Providers;
 
 use CircuitBreaker\Enums\CircuitBreakerState;
 use CircuitBreaker\Providers\ProviderInterface;
+use Tests\Unit\CircuitBreaker\Traits\DefaultConfigTrait;
 
 abstract class ProviderTestCase extends \PHPUnit\Framework\TestCase
 {
+    use DefaultConfigTrait;
+
     protected ProviderInterface $provider;
 
     public function testDefaultState(): void
     {
-        $this->assertEquals(
-            CircuitBreakerState::CLOSED,
-            $this->provider->getState(__CLASS__ . __METHOD__)
-        );
+        $this->assertEquals(CircuitBreakerState::CLOSED, $this->getDefaultState(__CLASS__ . __METHOD__));
     }
 
     public function testDefaultFailedAttempts(): void
     {
-        $this->assertEquals(
-            0,
-            $this->provider->getFailedAttempts(__CLASS__ . __METHOD__)
-        );
+        $this->assertEquals(0, $this->getDefaultFailedAttempts(__CLASS__ . __METHOD__));
     }
 
     public function testChangeStateToOpen(): void
     {
         $name = __CLASS__ . __METHOD__;
 
-        $this->provider->setState($name, CircuitBreakerState::OPEN);
+        $this->setDefaultState($name, CircuitBreakerState::OPEN);
 
-        $this->assertEquals(CircuitBreakerState::OPEN, $this->provider->getState($name));
-        $this->assertEquals(time(), $this->provider->getStateTimestamp($name));
+        $this->assertEquals(CircuitBreakerState::OPEN, $this->getDefaultState($name));
+        $this->assertEquals(time(), $this->getDefaultStateTimestamp($name));
     }
 
     public function testChangeStateToHalfOpen(): void
     {
         $name = __CLASS__ . __METHOD__;
 
-        $this->provider->incrementHalfOpenAttempts($name);
-        $this->provider->incrementHalfOpenAttempts($name);
-        $this->provider->incrementHalfOpenAttempts($name);
+        // increment to test if half open attempts are reset after changing state
+        $this->incrementDefaultHalfOpenAttempts($name);
+        $this->incrementDefaultHalfOpenAttempts($name);
+        $this->incrementDefaultHalfOpenAttempts($name);
 
-        $this->provider->setState($name, CircuitBreakerState::HALF_OPEN);
-        $this->assertEquals(CircuitBreakerState::HALF_OPEN, $this->provider->getState($name));
-        $this->assertEquals(0, $this->provider->getHalfOpenAttempts($name));
+        $this->setDefaultState($name, CircuitBreakerState::HALF_OPEN);
+        $this->assertEquals(CircuitBreakerState::HALF_OPEN, $this->getDefaultState($name));
+        $this->assertEquals(0, $this->getDefaultHalfOpenAttempts($name));
     }
 
     public function testChangeStateToClosed(): void
     {
         $name = __CLASS__ . __METHOD__;
 
-        $this->provider->incrementFailedAttempts($name);
-        $this->provider->incrementFailedAttempts($name);
-        $this->provider->incrementFailedAttempts($name);
+        // increment to test if failed attempts are reset after changing state
+        $this->incrementDefaultFailedAttempts($name);
+        $this->incrementDefaultFailedAttempts($name);
+        $this->incrementDefaultFailedAttempts($name);
 
-        $this->provider->setState($name, CircuitBreakerState::CLOSED);
-        $this->assertEquals(CircuitBreakerState::CLOSED, $this->provider->getState($name));
-        $this->assertEquals(0, $this->provider->getFailedAttempts($name));
+        $this->setDefaultState($name, CircuitBreakerState::CLOSED);
+        $this->assertEquals(CircuitBreakerState::CLOSED, $this->getDefaultState($name));
+        $this->assertEquals(0, $this->getDefaultFailedAttempts($name));
     }
 
     public function testIncrementAndResetFailedAttempts(): void
     {
         $name = __CLASS__ . __METHOD__;
 
-        $this->assertEquals(0, $this->provider->getFailedAttempts($name));
+        $this->assertEquals(0, $this->getDefaultFailedAttempts($name));
 
-        $this->provider->incrementFailedAttempts($name);
-        $this->provider->incrementFailedAttempts($name);
-        $this->provider->incrementFailedAttempts($name);
+        $this->incrementDefaultFailedAttempts($name);
+        $this->incrementDefaultFailedAttempts($name);
+        $this->incrementDefaultFailedAttempts($name);
 
-        $this->assertEquals(3, $this->provider->getFailedAttempts($name));
+        $this->assertEquals(3, $this->getDefaultFailedAttempts($name));
 
-        $this->provider->incrementFailedAttempts($name);
-        $this->provider->incrementFailedAttempts($name);
+        $this->incrementDefaultFailedAttempts($name);
+        $this->incrementDefaultFailedAttempts($name);
 
-        $this->assertEquals(5, $this->provider->getFailedAttempts($name));
+        $this->assertEquals(5, $this->getDefaultFailedAttempts($name));
     }
 
     public function testIncrementAndResetHalfOpenAttempts(): void
     {
         $name = __CLASS__ . __METHOD__;
 
-        $this->assertEquals(0, $this->provider->getHalfOpenAttempts($name));
+        $this->assertEquals(0, $this->getDefaultHalfOpenAttempts($name));
 
-        $this->provider->incrementHalfOpenAttempts($name);
-        $this->provider->incrementHalfOpenAttempts($name);
-        $this->provider->incrementHalfOpenAttempts($name);
+        $this->incrementDefaultHalfOpenAttempts($name);
+        $this->incrementDefaultHalfOpenAttempts($name);
+        $this->incrementDefaultHalfOpenAttempts($name);
 
-        $this->assertEquals(3, $this->provider->getHalfOpenAttempts($name));
+        $this->assertEquals(3, $this->getDefaultHalfOpenAttempts($name));
 
-        $this->provider->incrementHalfOpenAttempts($name);
-        $this->provider->incrementHalfOpenAttempts($name);
+        $this->incrementDefaultHalfOpenAttempts($name);
+        $this->incrementDefaultHalfOpenAttempts($name);
 
-        $this->assertEquals(5, $this->provider->getHalfOpenAttempts($name));
+        $this->assertEquals(5, $this->getDefaultHalfOpenAttempts($name));
     }
 }

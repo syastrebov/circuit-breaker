@@ -6,7 +6,7 @@ use CircuitBreaker\CircuitBreaker;
 use CircuitBreaker\CircuitBreakerConfig;
 use CircuitBreaker\Enums\CircuitBreakerState;
 
-class HalfOpenStateTest extends AbstractStateTestCase
+class HalfOpenStateTest extends StateTestCase
 {
     public function testChangeStateToClosed(): void
     {
@@ -16,8 +16,8 @@ class HalfOpenStateTest extends AbstractStateTestCase
             halfOpenThreshold: 2,
         ));
 
-        $this->reset($name);
-        $this->provider->setState($name, CircuitBreakerState::HALF_OPEN);
+        $this->resetDefaultConfig($name);
+        $this->setDefaultState($name, CircuitBreakerState::HALF_OPEN);
 
         $run = fn() => $circuit->run(
             $name,
@@ -26,19 +26,18 @@ class HalfOpenStateTest extends AbstractStateTestCase
             }
         );
 
-        $this->assertEquals(0, $this->provider->getHalfOpenAttempts($name));
+        $this->assertEquals(0, $this->getDefaultHalfOpenAttempts($name));
 
         $run();
-        $this->assertEquals(1, $this->provider->getHalfOpenAttempts($name));
+        $this->assertEquals(1, $this->getDefaultHalfOpenAttempts($name));
 
         $run();
-        $this->assertEquals(2, $this->provider->getHalfOpenAttempts($name));
+        $this->assertEquals(2, $this->getDefaultHalfOpenAttempts($name));
 
         $response = $run();
-
         $this->assertEquals('{"response": "data"}', $response);
-        $this->assertEquals(CircuitBreakerState::CLOSED, $this->provider->getState($name));
-        $this->assertEquals(0, $this->provider->getFailedAttempts($name));
+        $this->assertEquals(CircuitBreakerState::CLOSED, $this->getDefaultState($name));
+        $this->assertEquals(0, $this->getDefaultFailedAttempts($name));
     }
 
     public function testChangeStateToOpen(): void
@@ -49,8 +48,8 @@ class HalfOpenStateTest extends AbstractStateTestCase
             halfOpenThreshold: 2
         ));
 
-        $this->reset($name);
-        $this->provider->setState($name, CircuitBreakerState::HALF_OPEN);
+        $this->resetDefaultConfig($name);
+        $this->setDefaultState($name, CircuitBreakerState::HALF_OPEN);
 
         $response = $circuit->run(
             $name,
@@ -63,7 +62,7 @@ class HalfOpenStateTest extends AbstractStateTestCase
         );
 
         $this->assertEquals('{"response": "cached data"}', $response);
-        $this->assertEquals(CircuitBreakerState::OPEN, $this->provider->getState($name));
-        $this->assertEquals(0, $this->provider->getFailedAttempts($name));
+        $this->assertEquals(CircuitBreakerState::OPEN, $this->getDefaultState($name));
+        $this->assertEquals(0, $this->getDefaultFailedAttempts($name));
     }
 }

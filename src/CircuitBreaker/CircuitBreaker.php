@@ -29,7 +29,7 @@ class CircuitBreaker implements CircuitBreakerInterface
 
         do {
             try {
-                return match ($this->provider->getState($name)) {
+                return match ($this->provider->getState($this->config->prefix, $name)) {
                     CircuitBreakerState::OPEN => $this->handleOpenState($name, $action),
                     CircuitBreakerState::HALF_OPEN => $this->handleHalfOpenState($name, $action),
                     CircuitBreakerState::CLOSED => $this->handleClosedState($name, $action)
@@ -75,10 +75,10 @@ class CircuitBreaker implements CircuitBreakerInterface
         try {
             return $this->processAction($action);
         } catch (FailedRequestException $e) {
-            $this->provider->incrementFailedAttempts($name);
+            $this->provider->incrementFailedAttempts($this->config->prefix, $name);
 
-            if ($this->provider->getFailedAttempts($name) > $this->config->closedThreshold) {
-                $this->provider->setState($name, CircuitBreakerState::OPEN);
+            if ($this->provider->getFailedAttempts($this->config->prefix, $name) > $this->config->closedThreshold) {
+                $this->provider->setState($this->config->prefix, $name, CircuitBreakerState::OPEN);
 
                 $this->logger?->info('CircuitBreaker: state changed to OPEN');
             }
@@ -92,16 +92,16 @@ class CircuitBreaker implements CircuitBreakerInterface
         try {
             $response = $this->processAction($action);
 
-            $this->provider->incrementHalfOpenAttempts($name);
-            if ($this->provider->getHalfOpenAttempts($name) > $this->config->halfOpenThreshold) {
-                $this->provider->setState($name, CircuitBreakerState::CLOSED);
+            $this->provider->incrementHalfOpenAttempts($this->config->prefix, $name);
+            if ($this->provider->getHalfOpenAttempts($this->config->prefix, $name) > $this->config->halfOpenThreshold) {
+                $this->provider->setState($this->config->prefix, $name, CircuitBreakerState::CLOSED);
 
                 $this->logger?->info('CircuitBreaker: state changed to CLOSED');
             }
 
             return $response;
         } catch (FailedRequestException $e) {
-            $this->provider->setState($name, CircuitBreakerState::OPEN);
+            $this->provider->setState($this->config->prefix, $name, CircuitBreakerState::OPEN);
 
             $this->logger?->info('CircuitBreaker: state changed to OPEN');
 
@@ -111,8 +111,8 @@ class CircuitBreaker implements CircuitBreakerInterface
 
     private function handleOpenState(string $name, callable $action): mixed
     {
-        if ($this->provider->getStateTimestamp($name) + $this->config->openTimeout < time()) {
-            $this->provider->setState($name, CircuitBreakerState::HALF_OPEN);
+        if ($this->provider->getStateTimestamp($this->config->prefix, $name) + $this->config->openTimeout < time()) {
+            $this->provider->setState($this->config->prefix, $name, CircuitBreakerState::HALF_OPEN);
 
             $this->logger?->info('CircuitBreaker: state changed to HALF_OPEN');
 

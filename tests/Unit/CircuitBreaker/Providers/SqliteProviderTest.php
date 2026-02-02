@@ -14,11 +14,13 @@ class SqliteProviderTest extends ProviderTestCase
         $pdo = new \PDO("sqlite:$databaseFile");
         $pdo->prepare("    
             CREATE TABLE IF NOT EXISTS $table (
-                name VARCHAR(255) UNIQUE,
+                prefix VARCHAR(255) NOT NULL,
+                name VARCHAR(255) NOT NULL,
                 state TEXT CHECK(state IN ('open', 'half_open', 'closed')),
                 state_timestamp INTEGER,
                 half_open_attempts INTEGER,
-                failed_attempts INTEGER
+                failed_attempts INTEGER,
+                CONSTRAINT prefix_name_unique UNIQUE (prefix, name)
             );
         ")->execute();
 

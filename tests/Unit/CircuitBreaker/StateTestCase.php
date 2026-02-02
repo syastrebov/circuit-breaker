@@ -2,21 +2,18 @@
 
 namespace Tests\Unit\CircuitBreaker;
 
-use CircuitBreaker\Enums\CircuitBreakerState;
 use CircuitBreaker\Providers\MemoryProvider;
 use CircuitBreaker\Providers\ProviderInterface;
+use Tests\Unit\CircuitBreaker\Traits\DefaultConfigTrait;
 
-abstract class AbstractStateTestCase extends \PHPUnit\Framework\TestCase
+abstract class StateTestCase extends \PHPUnit\Framework\TestCase
 {
+    use DefaultConfigTrait;
+
     protected ProviderInterface $provider;
 
     public function setUp(): void
     {
         $this->provider = new MemoryProvider();
-    }
-
-    protected function reset(string $name): void
-    {
-        $this->provider->setState($name, CircuitBreakerState::CLOSED);
     }
 }
