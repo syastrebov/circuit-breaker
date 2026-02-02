@@ -23,6 +23,11 @@ class CircuitBreaker implements CircuitBreakerInterface
         }
     }
 
+    public function getConfig(): CircuitBreakerConfig
+    {
+        return $this->config;
+    }
+
     public function run(string $name, callable $action, ?callable $fallback = null): mixed
     {
         $attempt = 0;
