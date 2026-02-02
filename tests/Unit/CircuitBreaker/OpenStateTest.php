@@ -31,7 +31,9 @@ class OpenStateTest extends StateTestCase
 
         $this->assertEquals('{"response": "cached data"}', $response);
         $this->assertEquals(CircuitBreakerState::OPEN, $this->getDefaultState($name));
+        $this->assertEquals(CircuitBreakerState::OPEN, $circuit->getState($name));
         $this->assertEquals(0, $this->getDefaultFailedAttempts($name));
+        $this->assertEquals(0, $circuit->getFailedAttempts($name));
     }
 
     public function testChangeStateToHalfOpen(): void
@@ -59,7 +61,9 @@ class OpenStateTest extends StateTestCase
 
         $this->assertEquals('{"response": "cached data"}', $response);
         $this->assertEquals(CircuitBreakerState::OPEN, $this->getDefaultState($name));
+        $this->assertEquals(CircuitBreakerState::OPEN, $circuit->getState($name));
         $this->assertEquals(0, $this->getDefaultFailedAttempts($name));
+        $this->assertEquals(0, $circuit->getFailedAttempts($name));
 
         // run when state is opened, nothing should be changed
         $response = $circuit->run(
@@ -74,7 +78,9 @@ class OpenStateTest extends StateTestCase
 
         $this->assertEquals('{"response": "cached data"}', $response);
         $this->assertEquals(CircuitBreakerState::OPEN, $this->getDefaultState($name));
+        $this->assertEquals(CircuitBreakerState::OPEN, $circuit->getState($name));
         $this->assertEquals(0, $this->getDefaultFailedAttempts($name));
+        $this->assertEquals(0, $circuit->getFailedAttempts($name));
 
         // run after timeout, state should be changed to HALF_OPEN
         sleep(2);
@@ -88,8 +94,11 @@ class OpenStateTest extends StateTestCase
 
         $this->assertEquals('{"response": "data"}', $response);
         $this->assertEquals(CircuitBreakerState::HALF_OPEN, $this->getDefaultState($name));
+        $this->assertEquals(CircuitBreakerState::HALF_OPEN, $circuit->getState($name));
         $this->assertEquals(0, $this->getDefaultFailedAttempts($name));
+        $this->assertEquals(0, $circuit->getFailedAttempts($name));
         $this->assertEquals(1, $this->getDefaultHalfOpenAttempts($name));
+        $this->assertEquals(1, $circuit->getHalfOpenAttempts($name));
     }
 
     public function testTryToChangeStateToHalfOpenButFailed(): void
@@ -116,6 +125,7 @@ class OpenStateTest extends StateTestCase
         );
 
         $this->assertEquals(CircuitBreakerState::OPEN, $this->getDefaultState($name));
+        $this->assertEquals(CircuitBreakerState::OPEN, $circuit->getState($name));
 
         // run after timeout, state should be changed to HALF_OPEN
         sleep(2);
@@ -132,8 +142,11 @@ class OpenStateTest extends StateTestCase
 
         $this->assertEquals('{"response": "cached data"}', $response);
         $this->assertEquals(CircuitBreakerState::OPEN, $this->getDefaultState($name));
+        $this->assertEquals(CircuitBreakerState::OPEN, $circuit->getState($name));
         $this->assertEquals(0, $this->getDefaultFailedAttempts($name));
+        $this->assertEquals(0, $circuit->getFailedAttempts($name));
         $this->assertEquals(0, $this->getDefaultHalfOpenAttempts($name));
+        $this->assertEquals(0, $circuit->getHalfOpenAttempts($name));
     }
 
     public function testFallbackReturnsEmptyResponse(): void
@@ -162,5 +175,6 @@ class OpenStateTest extends StateTestCase
         );
 
         $this->assertEquals(CircuitBreakerState::OPEN, $this->getDefaultState($name));
+        $this->assertEquals(CircuitBreakerState::OPEN, $circuit->getState($name));
     }
 }

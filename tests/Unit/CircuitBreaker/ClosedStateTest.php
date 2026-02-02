@@ -28,7 +28,9 @@ class ClosedStateTest extends StateTestCase
 
         $this->assertEquals('{"response": "data"}', $response);
         $this->assertEquals(CircuitBreakerState::CLOSED, $this->getDefaultState($name));
+        $this->assertEquals(CircuitBreakerState::CLOSED, $circuit->getState($name));
         $this->assertEquals(0, $this->getDefaultFailedAttempts($name));
+        $this->assertEquals(0, $circuit->getFailedAttempts($name));
     }
 
     public function testRetry(): void
@@ -55,7 +57,9 @@ class ClosedStateTest extends StateTestCase
 
         $this->assertEquals('{"response": "data"}', $response);
         $this->assertEquals(CircuitBreakerState::CLOSED, $this->getDefaultState($name));
+        $this->assertEquals(CircuitBreakerState::CLOSED, $circuit->getState($name));
         $this->assertEquals(2, $this->getDefaultFailedAttempts($name));
+        $this->assertEquals(2, $circuit->getFailedAttempts($name));
     }
 
     public function testFallback(): void
@@ -80,7 +84,9 @@ class ClosedStateTest extends StateTestCase
 
         $this->assertEquals('{"response": "cached data"}', $response);
         $this->assertEquals(CircuitBreakerState::CLOSED, $this->getDefaultState($name));
+        $this->assertEquals(CircuitBreakerState::CLOSED, $circuit->getState($name));
         $this->assertEquals(3, $this->getDefaultFailedAttempts($name));
+        $this->assertEquals(3, $circuit->getFailedAttempts($name));
     }
 
     public function testNull(): void
@@ -103,7 +109,9 @@ class ClosedStateTest extends StateTestCase
 
         $this->assertNull($response);
         $this->assertEquals(CircuitBreakerState::CLOSED, $this->getDefaultState($name));
+        $this->assertEquals(CircuitBreakerState::CLOSED, $circuit->getState($name));
         $this->assertEquals(2, $this->getDefaultFailedAttempts($name));
+        $this->assertEquals(2, $circuit->getFailedAttempts($name));
     }
 
     public function testUnableToProcessException(): void
@@ -127,6 +135,8 @@ class ClosedStateTest extends StateTestCase
         );
 
         $this->assertEquals(CircuitBreakerState::CLOSED, $this->getDefaultState($name));
+        $this->assertEquals(CircuitBreakerState::CLOSED, $circuit->getState($name));
         $this->assertEquals(2, $this->getDefaultFailedAttempts($name));
+        $this->assertEquals(2, $circuit->getFailedAttempts($name));
     }
 }
