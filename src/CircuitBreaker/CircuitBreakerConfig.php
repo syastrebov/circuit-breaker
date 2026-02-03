@@ -22,22 +22,22 @@ readonly class CircuitBreakerConfig
         public bool $fallbackOrNull = self::FALLBACK_OR_NULL,
     ) {
         if (!$this->prefix) {
-            throw new \RuntimeException('Prefix must be set');
+            throw new \InvalidArgumentException('Prefix must be set');
         }
         if ($this->retries < 1) {
-            throw new \RuntimeException('Retries must be greater than 0');
+            throw new \InvalidArgumentException('Retries must be greater than 0');
         }
         if ($this->closedThreshold < 1) {
-            throw new \RuntimeException('Closed threshold must be greater than 0');
+            throw new \InvalidArgumentException('Closed threshold must be greater than 0');
         }
         if ($this->halfOpenThreshold < 1) {
-            throw new \RuntimeException('Half open threshold must be greater than 0');
+            throw new \InvalidArgumentException('Half open threshold must be greater than 0');
         }
         if ($this->retryInterval < 1) {
-            throw new \RuntimeException('Retry interval must be greater than 0');
+            throw new \InvalidArgumentException('Retry interval must be greater than 0');
         }
         if ($this->openTimeout < 1) {
-            throw new \RuntimeException('Open timeout must be greater than 0');
+            throw new \InvalidArgumentException('Open timeout must be greater than 0');
         }
     }
 
