@@ -259,5 +259,5 @@ $circuit = new CircuitBreaker(
 
 ~~~bash
 docker compose up -d
-docker exec -t circuit-breaker-php vendor/bin/phpunit
+docker compose exec -t php vendor/bin/phpunit
 ~~~
