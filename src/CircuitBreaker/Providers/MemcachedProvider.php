@@ -12,6 +12,7 @@ readonly class MemcachedProvider implements ProviderInterface
     ) {
     }
 
+    #[\Override]
     public function getState(string $prefix, string $name): CircuitBreakerState
     {
         if ($state = $this->getValue($prefix, $name, self::KEY_STATE)) {
@@ -21,21 +22,25 @@ readonly class MemcachedProvider implements ProviderInterface
         return CircuitBreakerState::CLOSED;
     }
 
+    #[\Override]
     public function getStateTimestamp(string $prefix, string $name): int
     {
         return (int) $this->getValue($prefix, $name, self::KEY_STATE_TIMESTAMP);
     }
 
+    #[\Override]
     public function getFailedAttempts(string $prefix, string $name): int
     {
         return (int) $this->getValue($prefix, $name, self::KEY_FAILED_ATTEMPTS);
     }
 
+    #[\Override]
     public function getHalfOpenAttempts(string $prefix, string $name): int
     {
         return (int) $this->getValue($prefix, $name, self::KEY_HALF_OPEN_ATTEMPTS);
     }
 
+    #[\Override]
     public function setState(string $prefix, string $name, CircuitBreakerState $state): void
     {
         try {
@@ -48,11 +53,13 @@ readonly class MemcachedProvider implements ProviderInterface
         }
     }
 
+    #[\Override]
     public function incrementFailedAttempts(string $prefix, string $name): void
     {
         $this->increment($prefix, $name, self::KEY_FAILED_ATTEMPTS);
     }
 
+    #[\Override]
     public function incrementHalfOpenAttempts(string $prefix, string $name): void
     {
         $this->increment($prefix, $name, self::KEY_HALF_OPEN_ATTEMPTS);

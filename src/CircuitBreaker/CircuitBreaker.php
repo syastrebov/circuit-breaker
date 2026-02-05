@@ -23,31 +23,37 @@ class CircuitBreaker implements CircuitBreakerInterface
         }
     }
 
+    #[\Override]
     public function getConfig(): CircuitBreakerConfig
     {
         return $this->config;
     }
 
+    #[\Override]
     public function getState(string $name): CircuitBreakerState
     {
         return $this->provider->getState($this->config->prefix, $name);
     }
 
+    #[\Override]
     public function getStateTimestamp(string $name): int
     {
         return $this->provider->getStateTimestamp($this->config->prefix, $name);
     }
 
+    #[\Override]
     public function getFailedAttempts(string $name): int
     {
         return $this->provider->getFailedAttempts($this->config->prefix, $name);
     }
 
+    #[\Override]
     public function getHalfOpenAttempts(string $name): int
     {
         return $this->provider->getHalfOpenAttempts($this->config->prefix, $name);
     }
 
+    #[\Override]
     public function run(string $name, callable $action, ?callable $fallback = null): mixed
     {
         $attempt = 0;

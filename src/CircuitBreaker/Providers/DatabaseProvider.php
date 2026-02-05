@@ -13,6 +13,7 @@ readonly class DatabaseProvider implements ProviderInterface
     ) {
     }
 
+    #[\Override]
     public function getState(string $prefix, string $name): CircuitBreakerState
     {
         if ($state = $this->getValue($prefix, self::KEY_STATE, $name)) {
@@ -22,21 +23,25 @@ readonly class DatabaseProvider implements ProviderInterface
         return CircuitBreakerState::CLOSED;
     }
 
+    #[\Override]
     public function getStateTimestamp(string $prefix, string $name): int
     {
         return (int) $this->getValue($prefix, self::KEY_STATE_TIMESTAMP, $name);
     }
 
+    #[\Override]
     public function getFailedAttempts(string $prefix, string $name): int
     {
         return (int) $this->getValue($prefix, self::KEY_FAILED_ATTEMPTS, $name);
     }
 
+    #[\Override]
     public function getHalfOpenAttempts(string $prefix, string $name): int
     {
         return (int) $this->getValue($prefix, self::KEY_HALF_OPEN_ATTEMPTS, $name);
     }
 
+    #[\Override]
     public function setState(string $prefix, string $name, CircuitBreakerState $state): void
     {
         try {
@@ -86,11 +91,13 @@ readonly class DatabaseProvider implements ProviderInterface
         }
     }
 
+    #[\Override]
     public function incrementFailedAttempts(string $prefix, string $name): void
     {
         $this->increment($prefix, self::KEY_FAILED_ATTEMPTS, $name);
     }
 
+    #[\Override]
     public function incrementHalfOpenAttempts(string $prefix, string $name): void
     {
         $this->increment($prefix, self::KEY_HALF_OPEN_ATTEMPTS, $name);
