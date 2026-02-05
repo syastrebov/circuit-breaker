@@ -148,6 +148,45 @@ $redis = new \RedisCluster(
 $circuit = new CircuitBreaker(new RedisProvider($redis));
 ~~~
 
+### Predis:
+
+~~~php
+use CircuitBreaker\CircuitBreaker;
+use Predis\Client;
+
+$predis = new Client([
+    'host' => 'redis',
+]);
+
+$predis->connect();
+
+$provider = new PredisProvider($predis);
+~~~
+
+### Predis cluster:
+
+~~~php
+use CircuitBreaker\CircuitBreaker;
+use Predis\Client;
+
+$nodes = [
+    'redis-node-1:6379',
+    'redis-node-2:6379',
+    'redis-node-3:6379',
+];
+
+$options = [
+    // 'redis' (server-side) or 'predis' (client-side)
+    'cluster' => 'redis',
+];
+
+$predis = new Client($nodes, $options);
+
+$predis->connect();
+
+$provider = new PredisProvider($predis);
+~~~
+
 ### Memcached:
 
 ~~~php

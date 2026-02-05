@@ -14,17 +14,17 @@ abstract class ProviderTestCase extends \PHPUnit\Framework\TestCase
 
     public function testDefaultState(): void
     {
-        $this->assertEquals(CircuitBreakerState::CLOSED, $this->getDefaultState(__CLASS__ . __METHOD__));
+        $this->assertEquals(CircuitBreakerState::CLOSED, $this->getDefaultState(static::class . __METHOD__));
     }
 
     public function testDefaultFailedAttempts(): void
     {
-        $this->assertEquals(0, $this->getDefaultFailedAttempts(__CLASS__ . __METHOD__));
+        $this->assertEquals(0, $this->getDefaultFailedAttempts(static::class . __METHOD__));
     }
 
     public function testChangeStateToOpen(): void
     {
-        $name = __CLASS__ . __METHOD__;
+        $name = static::class . __METHOD__;
 
         $this->setDefaultState($name, CircuitBreakerState::OPEN);
 
@@ -34,7 +34,7 @@ abstract class ProviderTestCase extends \PHPUnit\Framework\TestCase
 
     public function testChangeStateToHalfOpen(): void
     {
-        $name = __CLASS__ . __METHOD__;
+        $name = static::class . __METHOD__;
 
         // increment to test if half open attempts are reset after changing state
         $this->incrementDefaultHalfOpenAttempts($name);
@@ -48,7 +48,7 @@ abstract class ProviderTestCase extends \PHPUnit\Framework\TestCase
 
     public function testChangeStateToClosed(): void
     {
-        $name = __CLASS__ . __METHOD__;
+        $name = static::class . __METHOD__;
 
         // increment to test if failed attempts are reset after changing state
         $this->incrementDefaultFailedAttempts($name);
@@ -62,7 +62,7 @@ abstract class ProviderTestCase extends \PHPUnit\Framework\TestCase
 
     public function testIncrementAndResetFailedAttempts(): void
     {
-        $name = __CLASS__ . __METHOD__;
+        $name = static::class . __METHOD__;
 
         $this->assertEquals(0, $this->getDefaultFailedAttempts($name));
 
@@ -80,7 +80,7 @@ abstract class ProviderTestCase extends \PHPUnit\Framework\TestCase
 
     public function testIncrementAndResetHalfOpenAttempts(): void
     {
-        $name = __CLASS__ . __METHOD__;
+        $name = static::class . __METHOD__;
 
         $this->assertEquals(0, $this->getDefaultHalfOpenAttempts($name));
 

@@ -5,7 +5,7 @@ namespace CircuitBreaker\Providers;
 use CircuitBreaker\Enums\CircuitBreakerState;
 use CircuitBreaker\Exceptions\ProviderException;
 
-final class RedisProvider extends AbstractProvider
+final class RedisProvider extends AbstractRedisProvider
 {
     public function __construct(
         private readonly \Redis|\RedisCluster $redis
@@ -27,11 +27,6 @@ final class RedisProvider extends AbstractProvider
         } catch (\RedisException $e) {
             throw new ProviderException(previous: $e);
         }
-    }
-
-    private function buildKey(string $prefix, string $name, string $type): string
-    {
-        return sprintf('circuit_breaker:{%s.%s}:%s', $prefix, $name, $type);
     }
 
     #[\Override]
