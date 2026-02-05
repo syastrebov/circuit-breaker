@@ -19,6 +19,9 @@
     "guzzlehttp/guzzle": "^7.10"
   },
   "require-dev": {
+    "ext-memcached": "*",
+    "ext-pdo": "*",
+    "ext-redis": "*",
     "phpunit/phpunit": "^12.5",
     "phpstan/phpstan": "^2.1",
     "squizlabs/php_codesniffer": "^4.0",
