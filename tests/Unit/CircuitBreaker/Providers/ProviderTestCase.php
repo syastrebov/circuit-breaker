@@ -2,8 +2,8 @@
 
 namespace Tests\Unit\CircuitBreaker\Providers;
 
+use CircuitBreaker\Contracts\ProviderInterface;
 use CircuitBreaker\Enums\CircuitBreakerState;
-use CircuitBreaker\Providers\ProviderInterface;
 use Tests\Unit\CircuitBreaker\Traits\DefaultConfigTrait;
 
 abstract class ProviderTestCase extends \PHPUnit\Framework\TestCase

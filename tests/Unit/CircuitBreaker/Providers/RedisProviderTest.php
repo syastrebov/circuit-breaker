@@ -4,7 +4,7 @@ namespace Tests\Unit\CircuitBreaker\Providers;
 
 use CircuitBreaker\Providers\RedisProvider;
 
-class RedisProviderTest extends ProviderTestCase
+final class RedisProviderTest extends ProviderTestCase
 {
     public function setUp(): void
     {

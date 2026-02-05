@@ -4,7 +4,7 @@ namespace Tests\Unit\CircuitBreaker\Providers;
 
 use CircuitBreaker\Providers\DatabaseProvider;
 
-class SqliteProviderTest extends ProviderTestCase
+final class SqliteProviderTest extends ProviderTestCase
 {
     public function setUp(): void
     {

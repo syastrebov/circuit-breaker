@@ -8,7 +8,7 @@ use CircuitBreaker\Enums\CircuitBreakerState;
 use Tests\Unit\CircuitBreaker\Traits\CustomConfigTrait;
 use Tests\Unit\CircuitBreaker\Traits\DefaultConfigTrait;
 
-class PrefixTest extends StateTestCase
+final class PrefixTest extends StateTestCase
 {
     use DefaultConfigTrait;
     use CustomConfigTrait;

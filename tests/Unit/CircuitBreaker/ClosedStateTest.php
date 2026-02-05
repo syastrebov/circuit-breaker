@@ -7,7 +7,7 @@ use CircuitBreaker\CircuitBreakerConfig;
 use CircuitBreaker\Enums\CircuitBreakerState;
 use CircuitBreaker\Exceptions\UnableToProcessException;
 
-class ClosedStateTest extends StateTestCase
+final class ClosedStateTest extends StateTestCase
 {
     public function testSuccess(): void
     {

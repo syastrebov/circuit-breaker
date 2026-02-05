@@ -6,7 +6,7 @@ use CircuitBreaker\CircuitBreaker;
 use CircuitBreaker\CircuitBreakerConfig;
 use CircuitBreaker\Enums\CircuitBreakerState;
 
-class HalfOpenStateTest extends StateTestCase
+final class HalfOpenStateTest extends StateTestCase
 {
     public function testChangeStateToClosed(): void
     {

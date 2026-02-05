@@ -36,5 +36,8 @@ jobs:
       - name: PHPcs
         run: docker compose exec -t php vendor/bin/phpcs src tests
 
+      - name: Psalm
+        run: docker compose exec -t php vendor/bin/psalm
+
       - name: Run phpunit
         run: docker compose exec -t php vendor/bin/phpunit

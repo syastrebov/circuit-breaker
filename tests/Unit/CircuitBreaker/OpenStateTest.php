@@ -7,7 +7,7 @@ use CircuitBreaker\CircuitBreakerConfig;
 use CircuitBreaker\Enums\CircuitBreakerState;
 use CircuitBreaker\Exceptions\UnableToProcessException;
 
-class OpenStateTest extends StateTestCase
+final class OpenStateTest extends StateTestCase
 {
     public function testChangeStateToOpen(): void
     {

@@ -2,6 +2,6 @@
 
 namespace CircuitBreaker\Exceptions;
 
-class UnableToProcessException extends \RuntimeException
+final class UnableToProcessException extends CircuitBreakerException
 {
 }

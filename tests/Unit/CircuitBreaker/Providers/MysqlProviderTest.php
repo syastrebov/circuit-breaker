@@ -4,7 +4,7 @@ namespace Tests\Unit\CircuitBreaker\Providers;
 
 use CircuitBreaker\Providers\DatabaseProvider;
 
-class MysqlProviderTest extends ProviderTestCase
+final class MysqlProviderTest extends ProviderTestCase
 {
     public function setUp(): void
     {

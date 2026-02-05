@@ -4,7 +4,7 @@ namespace Tests\Unit\CircuitBreaker\Providers;
 
 use CircuitBreaker\Providers\MemcachedProvider;
 
-class MemcachedProviderTest extends ProviderTestCase
+final class MemcachedProviderTest extends ProviderTestCase
 {
     public function setUp(): void
     {

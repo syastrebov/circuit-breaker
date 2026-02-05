@@ -2,7 +2,7 @@
 
 namespace CircuitBreaker;
 
-readonly class CircuitBreakerConfig
+final readonly class CircuitBreakerConfig
 {
     public const string DEFAULT_PREFIX = 'default';
     public const int DEFAULT_RETRIES = 3;

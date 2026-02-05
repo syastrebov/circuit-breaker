@@ -3,24 +3,24 @@
 namespace CircuitBreaker;
 
 use CircuitBreaker\Contracts\CircuitBreakerInterface;
+use CircuitBreaker\Contracts\ProviderInterface;
 use CircuitBreaker\Enums\CircuitBreakerState;
 use CircuitBreaker\Exceptions\FailedRequestException;
 use CircuitBreaker\Exceptions\ProviderException;
 use CircuitBreaker\Exceptions\UnableToProcessException;
 use CircuitBreaker\Exceptions\UseFallbackException;
-use CircuitBreaker\Providers\ProviderInterface;
 use Psr\Log\LoggerInterface;
 
-class CircuitBreaker implements CircuitBreakerInterface
+final class CircuitBreaker implements CircuitBreakerInterface
 {
+    private CircuitBreakerConfig $config;
+
     public function __construct(
         private readonly ProviderInterface $provider,
-        private ?CircuitBreakerConfig $config = null,
+        ?CircuitBreakerConfig $config = null,
         private readonly ?LoggerInterface $logger = null
     ) {
-        if (!$this->config) {
-            $this->config = new CircuitBreakerConfig();
-        }
+        $this->config = $config ?: new CircuitBreakerConfig();
     }
 
     #[\Override]
@@ -71,12 +71,12 @@ class CircuitBreaker implements CircuitBreakerInterface
                 // break the loop, redirect to fallback
                 break;
             } catch (ProviderException $e) {
-                $this->logger->critical('CircuitBreaker: provider exception ' . $e->getPrevious()?->getMessage());
+                $this->logger?->critical('CircuitBreaker: provider exception ' . $e->getPrevious()?->getMessage());
 
                 // break the loop, redirect to fallback
                 break;
             } catch (\Throwable $e) {
-                $this->logger->critical('CircuitBreaker: unknown exception ' . $e->getMessage());
+                $this->logger?->critical('CircuitBreaker: unknown exception ' . $e->getMessage());
 
                 // break the loop, redirect to fallback
                 break;
@@ -85,7 +85,7 @@ class CircuitBreaker implements CircuitBreakerInterface
             usleep($this->config->retryInterval);
         } while (++$attempt < $this->config->retries);
 
-        if (!$fallback) {
+        if ($fallback === null) {
             if ($this->config->fallbackOrNull) {
                 return null;
             }

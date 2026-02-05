@@ -4,7 +4,7 @@ namespace Tests\Unit\CircuitBreaker\Providers;
 
 use CircuitBreaker\Providers\DatabaseProvider;
 
-class PostgresProviderTest extends ProviderTestCase
+final class PostgresProviderTest extends ProviderTestCase
 {
     public function setUp(): void
     {

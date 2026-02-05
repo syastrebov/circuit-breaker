@@ -2,6 +2,6 @@
 
 namespace CircuitBreaker\Exceptions;
 
-class ProviderException extends \RuntimeException
+final class ProviderException extends CircuitBreakerException
 {
 }

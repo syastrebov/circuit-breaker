@@ -5,40 +5,12 @@ namespace CircuitBreaker\Providers;
 use CircuitBreaker\Enums\CircuitBreakerState;
 use CircuitBreaker\Exceptions\ProviderException;
 
-readonly class DatabaseProvider implements ProviderInterface
+final class DatabaseProvider extends AbstractProvider
 {
     public function __construct(
-        private \PDO $pdo,
-        private string $table
+        private readonly \PDO $pdo,
+        private readonly string $table
     ) {
-    }
-
-    #[\Override]
-    public function getState(string $prefix, string $name): CircuitBreakerState
-    {
-        if ($state = $this->getValue($prefix, self::KEY_STATE, $name)) {
-            return CircuitBreakerState::from($state);
-        }
-
-        return CircuitBreakerState::CLOSED;
-    }
-
-    #[\Override]
-    public function getStateTimestamp(string $prefix, string $name): int
-    {
-        return (int) $this->getValue($prefix, self::KEY_STATE_TIMESTAMP, $name);
-    }
-
-    #[\Override]
-    public function getFailedAttempts(string $prefix, string $name): int
-    {
-        return (int) $this->getValue($prefix, self::KEY_FAILED_ATTEMPTS, $name);
-    }
-
-    #[\Override]
-    public function getHalfOpenAttempts(string $prefix, string $name): int
-    {
-        return (int) $this->getValue($prefix, self::KEY_HALF_OPEN_ATTEMPTS, $name);
     }
 
     #[\Override]
@@ -92,22 +64,11 @@ readonly class DatabaseProvider implements ProviderInterface
     }
 
     #[\Override]
-    public function incrementFailedAttempts(string $prefix, string $name): void
-    {
-        $this->increment($prefix, self::KEY_FAILED_ATTEMPTS, $name);
-    }
-
-    #[\Override]
-    public function incrementHalfOpenAttempts(string $prefix, string $name): void
-    {
-        $this->increment($prefix, self::KEY_HALF_OPEN_ATTEMPTS, $name);
-    }
-
-    private function getValue(string $prefix, string $column, string $name): ?string
+    protected function getValue(string $prefix, string $name, string $type): string|int|null
     {
         try {
             $stmt = $this->pdo->prepare("
-                SELECT $column 
+                SELECT $type 
                 FROM $this->table 
                 WHERE prefix = :prefix AND name = :name
             ");
@@ -123,17 +84,18 @@ readonly class DatabaseProvider implements ProviderInterface
         }
     }
 
-    private function increment(string $prefix, string $column, string $name): void
+    #[\Override]
+    protected function increment(string $prefix, string $name, string $type): void
     {
         try {
             $query = match ($this->pdo->getAttribute(\PDO::ATTR_DRIVER_NAME)) {
                 'mysql' => "
-                    INSERT INTO $this->table (prefix, name, $column) VALUES (:prefix, :name, 1) 
-                    ON DUPLICATE KEY UPDATE $column = $column + 1
+                    INSERT INTO $this->table (prefix, name, $type) VALUES (:prefix, :name, 1) 
+                    ON DUPLICATE KEY UPDATE $type = $type + 1
                 ",
                 'pgsql', 'sqlite' => "
-                    INSERT INTO $this->table (prefix, name, $column) VALUES (:prefix, :name, 1) 
-                    ON CONFLICT (prefix, name) DO UPDATE SET $column = $this->table.$column + 1
+                    INSERT INTO $this->table (prefix, name, $type) VALUES (:prefix, :name, 1) 
+                    ON CONFLICT (prefix, name) DO UPDATE SET $type = $this->table.$type + 1
                 ",
                 default => throw new ProviderException('Unsupported database driver')
             };

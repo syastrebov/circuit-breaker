@@ -3,8 +3,8 @@
 namespace Tests\Unit\CircuitBreaker\Traits;
 
 use CircuitBreaker\CircuitBreakerConfig;
+use CircuitBreaker\Contracts\ProviderInterface;
 use CircuitBreaker\Enums\CircuitBreakerState;
-use CircuitBreaker\Providers\ProviderInterface;
 
 /**
  * @property ProviderInterface $provider

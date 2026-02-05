@@ -1,6 +1,6 @@
 <?php
 
-namespace CircuitBreaker\Providers;
+namespace CircuitBreaker\Contracts;
 
 use CircuitBreaker\Enums\CircuitBreakerState;
 

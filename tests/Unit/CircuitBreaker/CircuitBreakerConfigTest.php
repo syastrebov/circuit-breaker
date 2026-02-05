@@ -4,7 +4,7 @@ namespace Tests\Unit\CircuitBreaker;
 
 use CircuitBreaker\CircuitBreakerConfig;
 
-class CircuitBreakerConfigTest extends \PHPUnit\Framework\TestCase
+final class CircuitBreakerConfigTest extends \PHPUnit\Framework\TestCase
 {
     public function testEmptyPrefixException()
     {

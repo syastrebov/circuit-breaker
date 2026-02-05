@@ -2,6 +2,6 @@
 
 namespace CircuitBreaker\Exceptions;
 
-class UseFallbackException extends \RuntimeException
+final class UseFallbackException extends CircuitBreakerException
 {
 }

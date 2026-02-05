@@ -5,39 +5,11 @@ namespace CircuitBreaker\Providers;
 use CircuitBreaker\Enums\CircuitBreakerState;
 use CircuitBreaker\Exceptions\ProviderException;
 
-readonly class MemcachedProvider implements ProviderInterface
+final class MemcachedProvider extends AbstractProvider
 {
     public function __construct(
-        private \Memcached $memcached
+        private readonly \Memcached $memcached
     ) {
-    }
-
-    #[\Override]
-    public function getState(string $prefix, string $name): CircuitBreakerState
-    {
-        if ($state = $this->getValue($prefix, $name, self::KEY_STATE)) {
-            return CircuitBreakerState::from($state);
-        }
-
-        return CircuitBreakerState::CLOSED;
-    }
-
-    #[\Override]
-    public function getStateTimestamp(string $prefix, string $name): int
-    {
-        return (int) $this->getValue($prefix, $name, self::KEY_STATE_TIMESTAMP);
-    }
-
-    #[\Override]
-    public function getFailedAttempts(string $prefix, string $name): int
-    {
-        return (int) $this->getValue($prefix, $name, self::KEY_FAILED_ATTEMPTS);
-    }
-
-    #[\Override]
-    public function getHalfOpenAttempts(string $prefix, string $name): int
-    {
-        return (int) $this->getValue($prefix, $name, self::KEY_HALF_OPEN_ATTEMPTS);
     }
 
     #[\Override]
@@ -53,24 +25,13 @@ readonly class MemcachedProvider implements ProviderInterface
         }
     }
 
-    #[\Override]
-    public function incrementFailedAttempts(string $prefix, string $name): void
-    {
-        $this->increment($prefix, $name, self::KEY_FAILED_ATTEMPTS);
-    }
-
-    #[\Override]
-    public function incrementHalfOpenAttempts(string $prefix, string $name): void
-    {
-        $this->increment($prefix, $name, self::KEY_HALF_OPEN_ATTEMPTS);
-    }
-
     private function buildKey(string $prefix, string $name, string $type): string
     {
         return sprintf('circuit_breaker:{%s.%s}:%s', $prefix, $name, $type);
     }
 
-    private function getValue(string $prefix, string $name, string $type): mixed
+    #[\Override]
+    protected function getValue(string $prefix, string $name, string $type): string|int|null
     {
         try {
             return $this->memcached->get($this->buildKey($prefix, $name, $type));
@@ -79,7 +40,8 @@ readonly class MemcachedProvider implements ProviderInterface
         }
     }
 
-    private function increment(string $prefix, string $name, string $type): void
+    #[\Override]
+    protected function increment(string $prefix, string $name, string $type): void
     {
         try {
             $key = $this->buildKey($prefix, $name, $type);

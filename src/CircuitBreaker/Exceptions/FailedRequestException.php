@@ -2,6 +2,6 @@
 
 namespace CircuitBreaker\Exceptions;
 
-class FailedRequestException extends \RuntimeException
+final class FailedRequestException extends CircuitBreakerException
 {
 }

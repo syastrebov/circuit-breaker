@@ -4,39 +4,15 @@ namespace CircuitBreaker\Providers;
 
 use CircuitBreaker\Enums\CircuitBreakerState;
 
-class MemoryProvider implements ProviderInterface
+final class MemoryProvider extends AbstractProvider
 {
     private array $state = [];
-
-    #[\Override]
-    public function getState(string $prefix, string $name): CircuitBreakerState
-    {
-        return $this->state[$prefix][$name][self::KEY_STATE] ?? CircuitBreakerState::CLOSED;
-    }
-
-    #[\Override]
-    public function getStateTimestamp(string $prefix, string $name): int
-    {
-        return $this->state[$prefix][$name][self::KEY_STATE_TIMESTAMP] ?? 0;
-    }
-
-    #[\Override]
-    public function getFailedAttempts(string $prefix, string $name): int
-    {
-        return $this->state[$prefix][$name][self::KEY_FAILED_ATTEMPTS] ?? 0;
-    }
-
-    #[\Override]
-    public function getHalfOpenAttempts(string $prefix, string $name): int
-    {
-        return $this->state[$prefix][$name][self::KEY_HALF_OPEN_ATTEMPTS] ?? 0;
-    }
 
     #[\Override]
     public function setState(string $prefix, string $name, CircuitBreakerState $state): void
     {
         $this->state[$prefix][$name] = [
-            self::KEY_STATE => $state,
+            self::KEY_STATE => $state->value,
             self::KEY_STATE_TIMESTAMP => time(),
             self::KEY_FAILED_ATTEMPTS => 0,
             self::KEY_HALF_OPEN_ATTEMPTS => 0,
@@ -44,16 +20,14 @@ class MemoryProvider implements ProviderInterface
     }
 
     #[\Override]
-    public function incrementFailedAttempts(string $prefix, string $name): void
+    protected function getValue(string $prefix, string $name, string $type): string|int|null
     {
-        $this->state[$prefix][$name][self::KEY_FAILED_ATTEMPTS] =
-            ($this->state[$prefix][$name][self::KEY_FAILED_ATTEMPTS] ?? 0) + 1;
+        return $this->state[$prefix][$name][$type] ?? null;
     }
 
     #[\Override]
-    public function incrementHalfOpenAttempts(string $prefix, string $name): void
+    protected function increment(string $prefix, string $name, string $type): void
     {
-        $this->state[$prefix][$name][self::KEY_HALF_OPEN_ATTEMPTS] =
-            ($this->state[$prefix][$name][self::KEY_HALF_OPEN_ATTEMPTS] ?? 0) + 1;
+        $this->state[$prefix][$name][$type] = ($this->state[$prefix][$name][$type] ?? 0) + 1;
     }
 }
