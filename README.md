@@ -241,6 +241,20 @@ $pdo->prepare("
 $provider = new DatabaseProvider($pdo, $table);
 ~~~
 
+## Logger (optional)
+
+~~~php
+use CircuitBreaker\CircuitBreaker;
+use CircuitBreaker\Providers\RedisProvider;
+use Monolog\Logger;
+
+$circuit = new CircuitBreaker(
+    provider: new MemoryProvider(),
+    logger: new Logger('circuit_breaker_channel')
+);
+
+~~~
+
 ## Run tests
 
 ~~~bash

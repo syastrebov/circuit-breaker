@@ -24,7 +24,8 @@
     "phpunit/phpunit": "^12.5",
     "phpstan/phpstan": "^2.1",
     "squizlabs/php_codesniffer": "^4.0",
-    "vimeo/psalm": "^6.15"
+    "vimeo/psalm": "^6.15",
+    "monolog/monolog": "^3.10"
   },
   "autoload": {
     "psr-4": {
