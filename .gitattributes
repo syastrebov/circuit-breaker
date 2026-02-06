@@ -7,5 +7,6 @@
 /.gitignore export-ignore
 /docker-compose.yaml export-ignore
 /phpunit.xml export-ignore
+/psalm.xml export-ignore
 /CHANGELOG.md export-ignore
 /README.md export-ignore
